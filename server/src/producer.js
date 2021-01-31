@@ -15,10 +15,10 @@ const sleep = (time) => new Promise((resolve) => setTimeout(resolve, time))
 const watch = async () => {
     try {
         const step = 100
-        let setting = await db.Setting.findOne({ meta_key: 'min_block_crawl' })
+        let setting = await db.Setting.findOne({ meta_key: 'without_elastic_min_block_crawl' })
         if (!setting) {
             setting = await new db.Setting({
-                meta_key: 'min_block_crawl',
+                meta_key: 'without_elastic_min_block_crawl',
                 meta_value: 0
             })
         }
