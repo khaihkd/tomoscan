@@ -51,7 +51,7 @@ consumer.task = async function (job) {
                 logger.warn(e)
             }
         } catch (e) {
-            logger.warn('Failed BlockSignerProcess %s', e)
+            logger.warn('Failed WithoutElasticBlockSignerProcess %s', e)
             return false
         }
     }

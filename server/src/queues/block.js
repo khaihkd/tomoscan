@@ -34,7 +34,7 @@ consumer.task = async function (job) {
             }
 
             if (blockNumber > 15) {
-                Queue.newQueue('BlockSignerProcess', { block: blockNumber - 15 })
+                Queue.newQueue('WithoutElasticBlockSignerProcess', { block: blockNumber - 15 })
             }
 
             const { txs, timestamp } = b
