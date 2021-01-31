@@ -5,7 +5,7 @@ const db = require('../models')
 const Queue = require('./index')
 
 const consumer = {}
-consumer.name = 'BlockProcess'
+consumer.name = 'WithoutElasticBlockProcess'
 
 const sleep = (time) => new Promise((resolve) => setTimeout(resolve, time))
 consumer.task = async function (job) {
@@ -21,7 +21,7 @@ consumer.task = async function (job) {
             if ((blockNumber >= blockPerEpoch * 2) &&
                 (blockNumber % blockPerEpoch === 50)) {
                 logger.info('get _rewards_ at epoch %s (block %s)', epoch, blockNumber)
-                Queue.newQueue('RewardProcess', { epoch: epoch })
+                Queue.newQueue('WithoutElasticRewardProcess', { epoch: epoch })
             }
             if ((blockNumber >= blockPerEpoch * 2) &&
                 (blockNumber % blockPerEpoch === 200)) {
@@ -29,11 +29,8 @@ consumer.task = async function (job) {
 
                 if (checkExistOnDb.length === 0) {
                     logger.info('re-get _rewards_ at epoch %s', epoch)
-                    Queue.newQueue('RewardProcess', { epoch: epoch })
+                    Queue.newQueue('WithoutElasticRewardProcess', { epoch: epoch })
                 }
-            }
-            if (blockNumber % 20 === 0) {
-                Queue.newQueue('BlockFinalityProcess', {})
             }
 
             if (blockNumber > 15) {
@@ -80,7 +77,7 @@ async function newTransaction (txs, timestamp) {
             continue
         }
 
-        Queue.newQueue('TransactionProcess', {
+        Queue.newQueue('WithoutElasticTransactionProcess', {
             txs: JSON.stringify(txs),
             timestamp: timestamp
         })

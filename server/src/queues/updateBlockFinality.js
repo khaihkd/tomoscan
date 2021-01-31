@@ -7,7 +7,7 @@ const config = require('config')
 const Web3Util = require('../helpers/web3')
 const Queue = require('../queues')
 const consumer = {}
-consumer.name = 'BlockFinalityProcess'
+consumer.name = 'WithoutElasticBlockFinalityProcess'
 consumer.processNumber = 1
 consumer.task = async function (job, done) {
     const web3 = await Web3Util.getWeb3()
@@ -18,7 +18,7 @@ consumer.task = async function (job, done) {
         const map = blocks.map(async function (block) {
             const countTx = await db.Tx.countDocuments({ blockNumber: block.number })
             if (countTx !== block.e_tx) {
-                Queue.newQueue('BlockProcess', { block: block.number })
+                Queue.newQueue('WithoutElasticBlockProcess', { block: block.number })
             }
             const blockOnChain = await web3.eth.getBlock(block.number)
             if (block.hash === blockOnChain.hash) {
@@ -55,7 +55,7 @@ consumer.task = async function (job, done) {
                 await db.TokenTrc21Tx.deleteMany({ blockHash: block.hash })
                 await db.TokenTx.deleteMany({ blockHash: block.hash })
 
-                Queue.newQueue('BlockProcess', { block: block.number })
+                Queue.newQueue('WithoutElasticBlockProcess', { block: block.number })
             }
         })
         await Promise.all(map)

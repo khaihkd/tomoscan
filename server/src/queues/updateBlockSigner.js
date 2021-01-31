@@ -7,7 +7,7 @@ const config = require('config')
 const BlockHelper = require('../helpers/block')
 
 const consumer = {}
-consumer.name = 'BlockSignerProcess'
+consumer.name = 'WithoutElasticBlockSignerProcess'
 consumer.processNumber = 1
 
 consumer.task = async function (job) {

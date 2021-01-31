@@ -26,7 +26,7 @@ const watch = async () => {
 
         while (true) {
             const web3 = await Web3Util.getWeb3()
-            const l = await Queue.countJob('BlockProcess')
+            const l = await Queue.countJob('WithoutElasticBlockProcess')
             if (l > 200) {
                 logger.debug('%s jobs, sleep 2 seconds before adding more', l)
                 await sleep(2000)
@@ -39,8 +39,8 @@ const watch = async () => {
                 let nextCrawl = minBlockCrawl + step
                 nextCrawl = nextCrawl < maxBlockNum ? nextCrawl : maxBlockNum
                 for (let i = minBlockCrawl + 1; i <= nextCrawl; i++) {
-                    logger.info('BlockProcess %s', i)
-                    Queue.newQueue('BlockProcess', { block: i })
+                    logger.info('WithoutElasticBlockProcess %s', i)
+                    Queue.newQueue('WithoutElasticBlockProcess', { block: i })
                     minBlockCrawl = i
                 }
             } else {

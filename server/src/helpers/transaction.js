@@ -12,7 +12,6 @@ const accountName = require('../contracts/accountName')
 const monitorAddress = require('../contracts/monitorAddress')
 const utils = require('./utils')
 const twitter = require('./twitter')
-const elastic = require('./elastic')
 
 const sleep = (time) => new Promise((resolve) => setTimeout(resolve, time))
 const TransactionHelper = {
@@ -27,10 +26,10 @@ const TransactionHelper = {
             const token = await db.Token.findOne({ hash: address })
             const Queue = require('../queues')
             if (!token) {
-                Queue.newQueue('AccountProcess', { listHash: JSON.stringify([address]) })
-                Queue.newQueue('TokenProcess', { address: address })
+                Queue.newQueue('WithoutElasticAccountProcess', { listHash: JSON.stringify([address]) })
+                Queue.newQueue('WithoutElasticTokenProcess', { address: address })
             }
-            Queue.newQueue('TokenTransactionProcess', { log: JSON.stringify(log), timestamp: timestamp })
+            Queue.newQueue('WithoutElasticTokenTransactionProcess', { log: JSON.stringify(log), timestamp: timestamp })
         } else if (log.topics[0] === TopicExecuteTrade) {
             const data = log.data.replace('0x', '')
             const params = []
@@ -160,7 +159,7 @@ const TransactionHelper = {
             }
 
             if (listHash.length > 0) {
-                Queue.newQueue('AccountProcess', { listHash: JSON.stringify(listHash) })
+                Queue.newQueue('WithoutElasticAccountProcess', { listHash: JSON.stringify(listHash) })
             }
 
             tx.cumulativeGasUsed = receipt.cumulativeGasUsed
@@ -197,28 +196,10 @@ const TransactionHelper = {
             }
             tx.status = status
 
-            // Internal transaction
-            try {
-                await elastic.deleteByQuery('internal-tx', { match: { hash: hash } })
-            } catch (e) {
-                // logger.warn('dont have internal tx for tx %s', hash)
-            }
 
             if (tx.to !== contractAddress.BlockSigner && tx.to !== contractAddress.TomoRandomize) {
                 const internalTx = await TransactionHelper.getInternalTx(tx)
                 tx.i_tx = internalTx.length
-                for (let i = 0; i < internalTx.length; i++) {
-                    const item = internalTx[i]
-                    const idx = {
-                        hash: item.hash,
-                        blockNumber: item.blockNumber,
-                        from: item.from,
-                        to: item.to,
-                        value: item.value,
-                        timestamp: (new Date(item.timestamp)).toISOString().replace(/T/, ' ').replace(/\..+/, '')
-                    }
-                    await elastic.indexWithoutId('internal-tx', idx)
-                }
             }
             if (!Number.isInteger(tx.cumulativeGasUsed)) {
                 tx.cumulativeGasUsed = web3.utils.hexToNumber(tx.cumulativeGasUsed)
@@ -241,26 +222,6 @@ const TransactionHelper = {
 
             await db.Tx.updateOne({ hash: hash }, tx,
                 { upsert: true, new: true })
-            await elastic.index(tx.hash, 'transactions', {
-                blockHash: tx.blockHash,
-                blockNumber: tx.blockNumber,
-                cumulativeGasUsed: tx.cumulativeGasUsed,
-                from: tx.from,
-                from_model: tx.from_model,
-                gas: tx.gas,
-                gasPrice: tx.gasPrice,
-                gasUsed: tx.gasUsed,
-                hash: tx.hash,
-                i_tx: tx.i_tx,
-                nonce: tx.nonce,
-                status: tx.status,
-                timestamp: (new Date(tx.timestamp)).toISOString()
-                    .replace(/T/, ' ').replace(/\..+/, ''),
-                to: tx.to,
-                to_model: tx.to_model,
-                transactionIndex: tx.transactionIndex,
-                value: tx.value
-            })
         } catch (e) {
             logger.warn('cannot crawl transaction %s with error %s. Sleep 2 second and retry', hash, e)
             await sleep(2000)

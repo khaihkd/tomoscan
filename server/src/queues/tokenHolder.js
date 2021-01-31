@@ -4,7 +4,7 @@ const TokenHolderHelper = require('../helpers/tokenHolder')
 const logger = require('../helpers/logger')
 
 const consumer = {}
-consumer.name = 'TokenHolderProcess'
+consumer.name = 'WithoutElasticTokenHolderProcess'
 consumer.processNumber = 2
 consumer.task = async function (job) {
     try {

@@ -1,4 +1,3 @@
-const api = require('./api')
 const Web3Connector = require('./services/Web3Connector')
 const authService = require('./services/Auth')
 
@@ -52,8 +51,6 @@ mongoose.connect(config.get('MONGODB_URI'),
                 'MongoDB Connection Error. Please make sure that MongoDB is running.')
             process.exit(1)
         } else {
-            // Initialize public api
-            app.use('/api', api)
         }
     })
 

@@ -3,7 +3,7 @@ const logger = require('../helpers/logger')
 const AccountHelper = require('../helpers/account')
 
 const consumer = {}
-consumer.name = 'AccountProcess'
+consumer.name = 'WithoutElasticAccountProcess'
 consumer.processNumber = 4
 consumer.task = async function (job) {
     const listHash = JSON.parse(job.listHash)
