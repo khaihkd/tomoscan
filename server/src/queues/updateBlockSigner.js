@@ -7,7 +7,7 @@ const config = require('config')
 const BlockHelper = require('../helpers/block')
 
 const consumer = {}
-consumer.name = 'WithoutElasticBlockSignerProcess'
+consumer.name = 'Crawl20mTo28mBlockSignerProcess'
 consumer.processNumber = 1
 
 consumer.task = async function (job) {
@@ -51,7 +51,7 @@ consumer.task = async function (job) {
                 logger.warn(e)
             }
         } catch (e) {
-            logger.warn('Failed WithoutElasticBlockSignerProcess %s', e)
+            logger.warn('Failed Crawl20mTo28mBlockSignerProcess %s', e)
             return false
         }
     }

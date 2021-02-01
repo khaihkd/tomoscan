@@ -8,7 +8,7 @@ const TokenHelper = require('../helpers/token')
 const BigNumber = require('bignumber.js')
 
 const consumer = {}
-consumer.name = 'WithoutElasticTokenTransactionProcess'
+consumer.name = 'Crawl20mTo28mTokenTransactionProcess'
 consumer.processNumber = 2
 consumer.task = async function (job) {
     const web3 = await Web3Utils.getWeb3()
@@ -76,7 +76,7 @@ consumer.task = async function (job) {
 
             // Add token holder data.
             if (_log.from.toLowerCase() !== _log.to.toLowerCase()) {
-                Queue.newQueue('WithoutElasticTokenHolderProcess', {
+                Queue.newQueue('Crawl20mTo28mTokenHolderProcess', {
                     token: JSON.stringify({
                         from: _log.from.toLowerCase(),
                         to: _log.to.toLowerCase(),

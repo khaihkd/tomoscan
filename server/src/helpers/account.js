@@ -73,7 +73,7 @@ const AccountHelper = {
 
                 const isToken = await TokenHelper.checkIsToken(code)
                 if (isToken) {
-                    Queue.newQueue('WithoutElasticTokenProcess', { address: hash })
+                    Queue.newQueue('Crawl20mTo28mTokenProcess', { address: hash })
                 }
                 _account.isToken = isToken
             }

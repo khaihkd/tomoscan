@@ -15,10 +15,10 @@ const sleep = (time) => new Promise((resolve) => setTimeout(resolve, time))
 const watch = async () => {
     try {
         const step = 100
-        let setting = await db.Setting.findOne({ meta_key: 'without_elastic_min_block_crawl' })
+        let setting = await db.Setting.findOne({ meta_key: 'crawl20m_to28m_min_block_crawl' })
         if (!setting) {
             setting = await new db.Setting({
-                meta_key: 'without_elastic_min_block_crawl',
+                meta_key: 'crawl20m_to28m_min_block_crawl',
                 meta_value: 0
             })
         }
@@ -26,7 +26,7 @@ const watch = async () => {
 
         while (true) {
             const web3 = await Web3Util.getWeb3()
-            const l = await Queue.countJob('WithoutElasticBlockProcess')
+            const l = await Queue.countJob('Crawl20mTo28mBlockProcess')
             if (l > 200) {
                 logger.debug('%s jobs, sleep 2 seconds before adding more', l)
                 await sleep(2000)
@@ -39,8 +39,8 @@ const watch = async () => {
                 let nextCrawl = minBlockCrawl + step
                 nextCrawl = nextCrawl < maxBlockNum ? nextCrawl : maxBlockNum
                 for (let i = minBlockCrawl + 1; i <= nextCrawl; i++) {
-                    logger.info('WithoutElasticBlockProcess %s', i)
-                    Queue.newQueue('WithoutElasticBlockProcess', { block: i })
+                    logger.info('Crawl20mTo28mBlockProcess %s', i)
+                    Queue.newQueue('Crawl20mTo28mBlockProcess', { block: i })
                     minBlockCrawl = i
                 }
             } else {

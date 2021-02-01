@@ -26,10 +26,10 @@ const TransactionHelper = {
             const token = await db.Token.findOne({ hash: address })
             const Queue = require('../queues')
             if (!token) {
-                // Queue.newQueue('WithoutElasticAccountProcess', { listHash: JSON.stringify([address]) })
-                Queue.newQueue('WithoutElasticTokenProcess', { address: address })
+                // Queue.newQueue('Crawl20mTo28mAccountProcess', { listHash: JSON.stringify([address]) })
+                Queue.newQueue('Crawl20mTo28mTokenProcess', { address: address })
             }
-            Queue.newQueue('WithoutElasticTokenTransactionProcess', { log: JSON.stringify(log), timestamp: timestamp })
+            Queue.newQueue('Crawl20mTo28mTokenTransactionProcess', { log: JSON.stringify(log), timestamp: timestamp })
         } else if (log.topics[0] === TopicExecuteTrade) {
             const data = log.data.replace('0x', '')
             const params = []
@@ -159,7 +159,7 @@ const TransactionHelper = {
             }
 
             // if (listHash.length > 0) {
-            //     Queue.newQueue('WithoutElasticAccountProcess', { listHash: JSON.stringify(listHash) })
+            //     Queue.newQueue('Crawl20mTo28mAccountProcess', { listHash: JSON.stringify(listHash) })
             // }
 
             tx.cumulativeGasUsed = receipt.cumulativeGasUsed

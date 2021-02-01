@@ -4,7 +4,7 @@ const TransactionHelper = require('../helpers/transaction')
 const logger = require('../helpers/logger')
 
 const consumer = {}
-consumer.name = 'WithoutElasticTransactionProcess'
+consumer.name = 'Crawl20mTo28mTransactionProcess'
 consumer.processNumber = 8
 consumer.task = async function (job) {
     const txs = JSON.parse(job.txs)

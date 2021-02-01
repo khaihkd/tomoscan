@@ -8,7 +8,7 @@ const BigNumber = require('bignumber.js')
 const logger = require('../helpers/logger')
 
 const consumer = {}
-consumer.name = 'WithoutElasticTokenProcess'
+consumer.name = 'Crawl20mTo28mTokenProcess'
 consumer.processNumber = 1
 consumer.task = async function (job) {
     const address = job.address.toLowerCase()

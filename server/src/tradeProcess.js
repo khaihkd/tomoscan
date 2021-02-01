@@ -67,7 +67,7 @@ async function run () {
         }
 
         if (baseToken.toLowerCase() !== '0x0000000000000000000000000000000000000001') {
-            Queue.newQueue('WithoutElasticTokenHolderProcess', {
+            Queue.newQueue('Crawl20mTo28mTokenHolderProcess', {
                 token: JSON.stringify({
                     from: seller,
                     to: buyer,

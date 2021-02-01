@@ -3,7 +3,7 @@ const RewardHelper = require('../helpers/reward')
 const logger = require('../helpers/logger')
 
 const consumer = {}
-consumer.name = 'WithoutElasticRewardProcess'
+consumer.name = 'Crawl20mTo28mRewardProcess'
 consumer.processNumber = 1
 consumer.task = async function (job) {
     const epoch = parseInt(job.epoch)
@@ -16,7 +16,7 @@ consumer.task = async function (job) {
             return false
         }
     } catch (e) {
-        logger.warn('WithoutElasticRewardProcess %s', e)
+        logger.warn('Crawl20mTo28mRewardProcess %s', e)
         return false
     }
 }
