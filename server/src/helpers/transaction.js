@@ -26,7 +26,7 @@ const TransactionHelper = {
             const token = await db.Token.findOne({ hash: address })
             const Queue = require('../queues')
             if (!token) {
-                Queue.newQueue('WithoutElasticAccountProcess', { listHash: JSON.stringify([address]) })
+                // Queue.newQueue('WithoutElasticAccountProcess', { listHash: JSON.stringify([address]) })
                 Queue.newQueue('WithoutElasticTokenProcess', { address: address })
             }
             Queue.newQueue('WithoutElasticTokenTransactionProcess', { log: JSON.stringify(log), timestamp: timestamp })
@@ -158,9 +158,9 @@ const TransactionHelper = {
                 await twitter.alertBigTransfer(tx.hash, tx.from, tx.to, tx.value)
             }
 
-            if (listHash.length > 0) {
-                Queue.newQueue('WithoutElasticAccountProcess', { listHash: JSON.stringify(listHash) })
-            }
+            // if (listHash.length > 0) {
+            //     Queue.newQueue('WithoutElasticAccountProcess', { listHash: JSON.stringify(listHash) })
+            // }
 
             tx.cumulativeGasUsed = receipt.cumulativeGasUsed
             tx.gasUsed = receipt.gasUsed
